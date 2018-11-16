@@ -5,7 +5,7 @@ var name = 'test2';
 var connectedUser; 
 
 //connecting to our signaling server 
-var conn = new WebSocket('ws://192.168.49.1:9090'); 
+var conn = new WebSocket('ws://localhost:9090'); 
 
 //signaling server open
 conn.onopen = function () { 
