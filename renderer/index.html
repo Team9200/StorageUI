@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<style>
+		.gauge {height:30px; width:200px; border:1px solid #000}
+		.now {height:30px; background-color:gray}
+		.c {text-align:center}
+	</style>
+	<h1>Open Threat Intelligence</h1>
+	<table>
+		<tr>
+			<td>Storage: </td>
+			<td><div class="gauge"><div class="now" id="storage"><span class="c" id="storagePer"></span></div></div></td>
+		</tr>
+		<tr>
+			<td>Response Rate: </td>
+			<td><div class="gauge"><div class="now" id="response-rate"><span class="c" id="resPer"></span></div></div></td>
+		</tr>
+		<tr>
+			<td>Balance: </td>
+			<td><div class="gauge"><div class="now" id="balance"></div></div></td>
+		</tr>
+	</table>
+	<input id="volumeValue" /><button id="addVolume">Create Volume</button>
+	<button id="filelistWin">FileList</button>
+	<script>
+		const { ipcRenderer } = require("electron");
+		var storage = document.getElementById('storage');
+		var storagePer = document.getElementById('storagePer');
+		var responseRate = document.getElementById('response-rate');
+		var resPer = document.getElementById('resPer');
+		var balance = document.getElementById('balance');
+		var volumeValue = document.getElementById('volumeValue');
+		var addVolume = document.getElementById('addVolume');
+		var filelistWin = document.getElementById('filelistWin');
+
+		ipcRenderer.on("sendStorage", (event, message) => {
+			storage.style.width = storagePer.innerHTML = message + "%";
+		});
+		ipcRenderer.on("sendResponse-rate", (event, message) => {
+			resPer.innerHTML = responseRate.style.width = message + "%";
+		});
+		ipcRenderer.on("sendBalance", (event, message) => {
+			
+		});
+		addVolume.addEventListener("click", () => {
+			ipcRenderer.send('createVolume', volumeValue.value);
+		});
+		filelistWin.addEventListener("click", () => {
+			ipcRenderer.send('filelistWin');
+		});
+
+	</script>
+</html>
+

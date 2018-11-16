@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<h1>Open Threat Intelligence</h1>
+	<table>
+		<tr>
+			<td>Storage: </td>
+			<td><span id="storage"></span></td>
+		</tr>
+		<tr>
+			<td>Response Rate: </td>
+			<td><span id="response-rate"></span></td>
+		</tr>
+		<tr>
+			<td>Balance: </td>
+			<td><span id="balance"></span></td>
+		</tr>
+	</table>
+	<script src="./js/p2p/transfer.js"></script>
+	<script>
+		const { ipcRenderer } = require("electron");
+		var storage = document.getElementById('storage');
+		var response-rate = document.getElementById('response-rate');
+		var balance = document.getElementById('balance');
+
+		ipcRenderer.on("sendStorage", (event, message) => {
+			storage.innerHTML = message;
+		};
+		ipcRenderer.on("sendResponse-rate", (event, message) => {
+			response-rate.innerHTML = message;
+		};
+		ipcRenderer.on("sendBalance", (event, message) => {
+			balance.innerHTML = message;
+		};
+	</script>
+</html>
+

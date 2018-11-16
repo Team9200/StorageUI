@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<ul id="filelist">
+		
+	</ul>
+
+	<script>
+		const { ipcRenderer } = require('electron');
+		var filelist = document.getElementById('filelist');
+
+		ipcRenderer.on('filelistData', (event, message) => {
+			console.log(JSON.parse(message));
+			filelist.innerHTML = JSON.parse(message);
+			JSON.parse(message).forEach((value, index) => {
+				console.log(index, value.hash);
+				
+				var newLi = document.createElement("li");
+				filelist.appendChild(newLi);
+			   	newLi.innerHtml = value.hash;
+			});
+		});
+	</script>
+</html>
