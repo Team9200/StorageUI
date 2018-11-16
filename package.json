@@ -1,0 +1,26 @@
+{
+  "name": "storageui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node /home/true/StorageUI/StorageUI/node_modules/electron/cli.js index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Team9200/StorageUI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team9200/StorageUI/issues"
+  },
+  "homepage": "https://github.com/Team9200/StorageUI#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "electron": "^3.0.9",
+    "express": "^4.16.4",
+    "scss": "^0.2.4"
+  }
+}
