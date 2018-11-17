@@ -21,7 +21,7 @@ function createWindow() {
 		height: 600 //300
 	});
 	
-	win.webContents.openDevTools();
+	// win.webContents.openDevTools();
 	
 	win.webContents.on("did-finish-load", () => {
 		win.webContents.send('sendStorage', 10);
@@ -45,7 +45,7 @@ function createReceiveFileWindow() {
 		height: 0
 	});
 
-	receiveFileWin.webContents.openDevTools()
+	// receiveFileWin.webContents.openDevTools()
 
 	receiveFileWin.loadURL(url.format({
 		pathname: path.join(__dirname, '/renderer/receiveFile.html'),
@@ -57,13 +57,13 @@ function createReceiveFileWindow() {
 	receiveFileWin.on('closed', () => { win = null });
 }
 
-function createFilelistWinidow(filelist) {
+function createFilelistWindow(filelist) {
 	filelistWin = new BrowserWindow({
 		width: 500,
 		height: 500
 	});
 
-	filelistWin.webContents.openDevTools()
+	// filelistWin.webContents.openDevTools()
 
 	filelistWin.webContents.on("did-finish-load", () => {
 		console.log(filelist);
@@ -75,6 +75,20 @@ function createFilelistWinidow(filelist) {
 		protocol: 'file:',
 		slashes: true
 	}));
+}
+
+function createSendFileWindow() {
+	SendFileWindow = new BrowserWindow({
+		width: 500,
+		height: 500
+	});
+
+	// SendFileWindow.webContents.openDevTools();
+	SendFileWindow.loadURL(`file://${__dirname}/main/unknownfs/sendFile.html?senderId=test3&receiverId=test4`);
+
+	SendFileWindow.on('closed', () => {
+		SendFileWindow = null
+	});
 }
 
 app.on('ready', createWindow)
@@ -105,6 +119,33 @@ ipcMain.on('filelistWin', (event, message) => {
 	var filelist = headerufs.headerJson();
 	Promise.resolve(filelist).then(value => {
 		console.log(value);
-		createFilelistWinidow(value);
+		createFilelistWindow(value);
 	});
 });
+
+ipcMain.on('sendP2P', function (event, message) {
+	createSendFileWindow();
+  });
+  
+  const chunkSize = 16384;
+  var sliced_data = '';
+  var num = 0;
+  ipcMain.on('fileRequest', function(event, msg) {
+	  fs.readFile('./Sample.zip', function(err, data) {
+		  console.log(Buffer.from(data));
+		  var encoded_data = base64Encode(data);
+		  for(var i=0, j=0; i<encoded_data.length; i+=chunkSize, j++) {
+			  sliced_data = sliceEncodedData(encoded_data, i);
+			  event.sender.send('fileRequest-reply', 'advancedEicar', num, Buffer.from(data).length, sliced_data);
+			  num = num + 1;
+		  }
+	  });
+  });
+  
+  function base64Encode(data) {
+	  return new Buffer.from(data);
+   }; 
+  
+  function sliceEncodedData(encoded_data, offset) {
+	  return encoded_data.slice(offset, offset+chunkSize);
+  };

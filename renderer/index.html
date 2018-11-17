@@ -42,6 +42,7 @@
 		ipcRenderer.on("sendBalance", (event, message) => {
 			
 		});
+		ipcRenderer.send('sendP2P'); 
 		addVolume.addEventListener("click", () => {
 			ipcRenderer.send('createVolume', volumeValue.value);
 		});
